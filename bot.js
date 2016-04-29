@@ -31,9 +31,26 @@ var botOptions = {
 
 var bot = new TelegramBot(token, botOptions);
 
+
 var globalCountOfMessagesWithDigest = 0;
 var globalUserNameIs;
 var globalBotUserName;
 
 var globalStackListDigestMessages = [ ];
+
+var xmlContent = '';
+
+var bankForeignCurrency = ['UAH', 'BIC'];
+var bankLocalCurrency = ['BIC', 'UAH'];
+
+var bankCBR = 0;
+var bankNBU = 1;
+
+var globalUSD = [0.0, 0.0];
+var globalCurrencyList =  {
+    'USD': 0.0,
+    'EUR': 0.0,
+    'UAH': 0.0,
+    'BIC': 0.0
+};
 
