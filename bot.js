@@ -14,3 +14,10 @@ var httpOptions = [
         port: 80,
         path: '/scripts/XML_daily.asp?'
     },
+    {
+        host: 'www.bank-ua.com',
+        port: 80,
+        path: '/export/currrate.xml'
+    }
+
+
