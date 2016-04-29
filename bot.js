@@ -62,3 +62,64 @@ bot.getMe().then(function(me)
     console.log('And my username is @%s.', me.username);
     globalBotUserName = me.username;
 });
+
+
+var express = require('express');
+var packageInfo = require('./package.json');
+var bodyParser = require('body-parser');
+
+var app = express();
+
+app.use(bodyParser.json());
+
+
+app.get('/', function (req, res) {
+    res.json({ version: packageInfo.version });
+});
+
+
+
+var server = app.listen(process.env.PORT, function () {
+    var host = server.address().address;
+    var port = server.address().port;
+
+    console.log('Web server started at http://%s:%s', host, port);
+});
+
+module.exports = function(bot){
+    app.post('/' + token, function (req, res) {
+        bot.processUpdate(req.body);
+        res.sendStatus(200);
+    });
+};
+
+function sendCurrency(bankID, lastForeignValue, newForeignValue, messageChatId)
+{
+    // Generate currency answer.
+    var currencyAnswer = '';
+    if (lastForeignValue < newForeignValue) {
+        currencyAnswer += (bankID === bankCBR) ?
+            createReportCurrencyHeader(
+                catchPhrases.roubleCommandDown[
+                    getRandomInt(0, catchPhrases.roubleCommandDown.length - 1)]) :
+        catchPhrases.roubleCommand[0] + '\n';
+    } else if (lastForeignValue > newForeignValue) {
+        currencyAnswer += (bankID === bankCBR) ?
+            createReportCurrencyHeader(
+                catchPhrases.roubleCommandUp[
+                    getRandomInt(0, catchPhrases.roubleCommandUp.length - 1)]) :
+        catchPhrases.roubleCommand[0] + '\n';
+    } else {
+        currencyAnswer += createReportCurrencyHeader(
+            catchPhrases.roubleCommandMiddle[
+                getRandomInt(0, catchPhrases.roubleCommandMiddle.length - 1)]);
+    }
+    currencyAnswer += getCurrencyTableString(bankID);
+
+    // Send currency answer to chat.
+    sendMessageByBot(messageChatId, currencyAnswer);
+}
+
+
+
+
