@@ -19,5 +19,9 @@ var httpOptions = [
         port: 80,
         path: '/export/currrate.xml'
     }
-
+    {
+        host: 'www.bitcoin.org',
+        port: 80,
+        path: '/src/p_daily.xml'
+    }
 
