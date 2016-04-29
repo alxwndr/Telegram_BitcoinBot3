@@ -28,3 +28,12 @@ var httpOptions = [
 var botOptions = {
     polling: true
 };
+
+var bot = new TelegramBot(token, botOptions);
+
+var globalCountOfMessagesWithDigest = 0;
+var globalUserNameIs;
+var globalBotUserName;
+
+var globalStackListDigestMessages = [ ];
+
