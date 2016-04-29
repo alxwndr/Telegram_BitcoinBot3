@@ -25,3 +25,6 @@ var httpOptions = [
         path: '/src/p_daily.xml'
     }
 
+var botOptions = {
+    polling: true
+};
