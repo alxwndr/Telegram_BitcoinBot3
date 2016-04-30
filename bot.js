@@ -63,7 +63,17 @@ if (messageText.indexOf('/digest') === 0 || messageText.indexOf('/digest@'+globa
         }
     }
 
-var xmlContent = '';
+
+    if (bSendDigest) {
+        var botAnswer = '';
+        var endLineString = '\n';
+        var stackSize = globalStackListDigestMessages.length;
+
+        // Count of digest messages from one chat.
+        var countOfDigestMessagesByChat = getCountDigestMessagesOfChat(messageChatId, dayDelay);
+
+
+        var xmlContent = '';
 
 var bankForeignCurrency = ['UAH', 'BIC'];
 var bankLocalCurrency = ['BIC', 'UAH'];
