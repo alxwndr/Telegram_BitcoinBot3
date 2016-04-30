@@ -47,6 +47,22 @@ if (messageText.indexOf('/digest') === 0 || messageText.indexOf('/digest@'+globa
     var msgLength = messageText.length;
     var fullCommandLength = fullCommand.length + 2;
 
+
+    messageText = messageText.trim();
+
+    if (messageText === '/digest' || messageText === fullCommand) {
+        bGoodCommand = true;
+        messageDelay = getMessageDelay(1);
+    }
+
+    if (msgLength === 9 || msgLength === fullCommandLength) {
+        var arg = parseInt(messageText[msgLength - 1]);
+        if (arg >= 1 && arg <= 7) {
+            bGoodCommand = true;
+            messageDelay = getMessageDelay(arg);
+        }
+    }
+
 var xmlContent = '';
 
 var bankForeignCurrency = ['UAH', 'BIC'];
