@@ -38,6 +38,15 @@ var globalBotUserName;
 
 var globalStackListDigestMessages = [ ];
 
+
+// DIGEST COMMAND
+if (messageText.indexOf('/digest') === 0 || messageText.indexOf('/digest@'+globalBotUserName) === 0) {
+    var bGoodCommand = false;
+    var messageDelay = 0;
+    var fullCommand = '/digest@' + globalBotUserName;
+    var msgLength = messageText.length;
+    var fullCommandLength = fullCommand.length + 2;
+
 var xmlContent = '';
 
 var bankForeignCurrency = ['UAH', 'BIC'];
