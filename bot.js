@@ -73,6 +73,17 @@ if (messageText.indexOf('/digest') === 0 || messageText.indexOf('/digest@'+globa
         var countOfDigestMessagesByChat = getCountDigestMessagesOfChat(messageChatId, dayDelay);
 
 
+        if (messageText.indexOf('/chart') === 0 || messageText.indexOf('/chart@'+globalBotUserName) === 0) {
+            messageText = messageText.trim();
+            var splitCommandList = messageText.split(' ');
+            if (splitCommandList.length === 2) {
+                sendChartToChat(messageChatId, splitCommandList[1]);
+            } else {
+                sendMessageByBot(messageChatId,
+                    generateChartsHelpString());
+            }
+        }
+
         var xmlContent = '';
 
 var bankForeignCurrency = ['UAH', 'BIC'];
