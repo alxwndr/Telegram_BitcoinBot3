@@ -167,5 +167,22 @@ function sendCurrency(bankID, lastForeignValue, newForeignValue, messageChatId)
 }
 
 
+        function generateHelpString()
+        {
+            var botAnswer = '';
+            for (var i = 0; i < catchPhrases.helpCommand.length; ++i) {
+                botAnswer += catchPhrases.helpCommand[i] + '\n';
+            }
 
+            if (getAdminRights()) {
+                for (var j = 0; j < catchPhrases.helpCommandAdmin.length; ++j) {
+                    botAnswer += catchPhrases.helpCommandAdmin[j] + '\n';
+                }
+            }
+
+            // Delete last line break
+            botAnswer.trim();
+
+            return botAnswer;
+        }
 
