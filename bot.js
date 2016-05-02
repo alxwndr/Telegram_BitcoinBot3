@@ -184,5 +184,15 @@ function sendCurrency(bankID, lastForeignValue, newForeignValue, messageChatId)
             botAnswer.trim();
 
             return botAnswer;
-        }
+
+            function trimEachString(aString)
+            {
+                return aString.split('\n').map(function(aLine)
+                {
+                    aLine = aLine.trim();
+                    return aLine;
+                }).join('\n');
+            }
+
+
 
