@@ -39,6 +39,10 @@ MongoClient.connect(url, function (err, db) {
 
 
 
+
+
+
+
 add new Boolean() function function_name (argument) {
     // body...
 }

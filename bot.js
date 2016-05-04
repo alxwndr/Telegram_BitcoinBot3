@@ -194,5 +194,48 @@ function sendCurrency(bankID, lastForeignValue, newForeignValue, messageChatId)
                 }).join('\n');
             }
 
+            /*show all standatrt func in messages*/
+
+            handleSettings: function (chatId, db, data) {
+                let that = this;
+
+                db.collection('users').findOne({id: chatId}, function (err, user) {
+                    if (err) { throw err; }
+
+                    let sendChanges = (user && user.sendChanges) || false;
+                    let text = '';
+                    let replyMarkup = {resize_keyboard: true};
+
+                    if (!user) {
+                        db.collection('users').insertOne({
+                            id: chatId,
+
+                        sendChanges: sendChanges,
+                            difference: 1
+                    });
+                    }
+
+                    if (sendChanges) {
+                        let difference = user.difference || 1;
+
+
+                        replyMarkup.keyboard = [
+                            [''],
+                            [''],
+                            ['']
+                        ];
+                    } else {
+                        text += '';
+                        replyMarkup.keyboard = [
+                            [''],
+                            ['']
+                        ];
+                    }
+
+                    that.sendMessage(chatId, text, JSON.stringify(replyMarkup));
+                });
+            },
+
+
 
 
