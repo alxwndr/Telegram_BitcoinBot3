@@ -1,11 +1,6 @@
 /**
  * Created by alexandr on 03.05.2016.
  */
-function trimEachString(aString)
-{
-    return aString.split('\n').map(function(aLine)
-    {
-        aLine = aLine.trim();
-        return aLine;
-    }).join('\n');
-}
+let sender = require(__dirname + '/sender');
+let MongoClient = require('mongodb').MongoClient;
+let url = 'mongodb://localhost:27017/bcratebot';
