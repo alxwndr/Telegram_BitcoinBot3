@@ -139,32 +139,7 @@ module.exports = function(bot){
     });
 };
 
-function sendCurrency(bankID, lastForeignValue, newForeignValue, messageChatId)
-{
-    // Generate currency answer.
-    var currencyAnswer = '';
-    if (lastForeignValue < newForeignValue) {
-        currencyAnswer += (bankID === bankCBR) ?
-            createReportCurrencyHeader(
-                catchPhrases.roubleCommandDown[
-                    getRandomInt(0, catchPhrases.roubleCommandDown.length - 1)]) :
-        catchPhrases.roubleCommand[0] + '\n';
-    } else if (lastForeignValue > newForeignValue) {
-        currencyAnswer += (bankID === bankCBR) ?
-            createReportCurrencyHeader(
-                catchPhrases.roubleCommandUp[
-                    getRandomInt(0, catchPhrases.roubleCommandUp.length - 1)]) :
-        catchPhrases.roubleCommand[0] + '\n';
-    } else {
-        currencyAnswer += createReportCurrencyHeader(
-            catchPhrases.roubleCommandMiddle[
-                getRandomInt(0, catchPhrases.roubleCommandMiddle.length - 1)]);
-    }
-    currencyAnswer += getCurrencyTableString(bankID);
 
-    // Send currency answer to chat.
-    sendMessageByBot(messageChatId, currencyAnswer);
-}
 
 
         function generateHelpString()
