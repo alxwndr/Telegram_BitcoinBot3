@@ -14,3 +14,16 @@ let options = {
     method: 'GET'
 };
 
+let request;
+
+request = https.request(options, function (res) {
+    res.on('end', function (data) {
+        console.log('Got answer: ' + new Date() + '\n', data);
+    });
+});
+
+request.on('error', function (e) {
+    console.log('Problem with request: ' + e.message);
+});
+
+request.end();
