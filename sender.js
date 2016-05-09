@@ -37,4 +37,22 @@ MongoClient.connect(url, function (err, db) {
     });
 });
 
+updateUser: function (chatId, db, options) {
+    let that = this;
+
+    if (options && Object.keys(options).length) {
+        db.collection('users').findOneAndUpdate({
+            id: chatId
+        }, {
+            $set: options
+        }, function (err) {
+            if (err) { throw err; }
+
+            if (typeof options.sendChanges === 'boolean') {
+                that.notifyAdmin(db, options.sendChanges);
+            }
+        });
+    }
+},
+
 
