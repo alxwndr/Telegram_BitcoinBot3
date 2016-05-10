@@ -57,97 +57,6 @@ var TelegramBot = function (token, options) {
   }
 };
 
-util.inherits(TelegramBot, EventEmitter);
-
-TelegramBot.prototype.initPolling = function() {
-  if (this._polling) {
-    this._polling.abort = true;
-    this._polling.lastRequest.cancel('Polling restart');
-  }
-  this._polling = new TelegramBotPolling(this.token, this.options.polling, this.processUpdate);
-};
-
-TelegramBot.prototype._processUpdate = function (update) {
-  debug('Process Update %j', update);
-  var message = update.message;
-  var inline_query = update.inline_query;
-  var chosen_inline_result = update.chosen_inline_result;
-
-  if (message) {
-    debug('Process Update message %j', message);
-    this.emit('message', message);
-    var processMessageType = function (messageType) {
-      if (message[messageType]) {
-        debug('Emtting %s: %j', messageType, message);
-        this.emit(messageType, message);
-      }
-    };
-    this.messageTypes.forEach(processMessageType.bind(this));
-    if (message.text) {
-      debug('Text message');
-      this.textRegexpCallbacks.forEach(function (reg) {
-        debug('Matching %s whith', message.text, reg.regexp);
-        var result = reg.regexp.exec(message.text);
-        if (result) {
-          debug('Matches', reg.regexp);
-          reg.callback(message, result);
-        }
-      });
-    }
-    if (message.reply_to_message) {
-      // Only callbacks waiting for this message
-      this.onReplyToMessages.forEach(function (reply) {
-        // Message from the same chat
-        if (reply.chatId === message.chat.id) {
-          // Responding to that message
-          if (reply.messageId === message.reply_to_message.message_id) {
-            // Resolve the promise
-            reply.callback(message);
-          }
-        }
-      });
-    }
-  } else if (inline_query) {
-    debug('Process Update inline_query %j', inline_query);
-    this.emit('inline_query', inline_query);
-  } else if (chosen_inline_result) {
-    debug('Process Update chosen_inline_result %j', chosen_inline_result);
-    this.emit('chosen_inline_result', chosen_inline_result);
-  }
-};
-
-TelegramBot.prototype._request = function (path, options) {
-  if (!this.token) {
-    throw new Error('Telegram Bot Token not provided!');
-  }
-  options = options || {};
-  if (options.form) {
-    var replyMarkup = options.form.reply_markup;
-    if (replyMarkup && typeof replyMarkup !== 'string') {
-      // reply_markup must be passed as JSON stringified to Telegram
-      options.form.reply_markup = JSON.stringify(replyMarkup);
-    }
-  }
-  options.url = this._buildURL(path);
-  debug('HTTP request: %j', options);
-  return requestPromise(options)
-    .then(function (resp) {
-      if (resp[0].statusCode !== 200) {
-        throw new Error(resp[0].statusCode+' '+resp[0].body);
-      }
-      var data;
-      try {
-        data = JSON.parse(resp[0].body);
-      } catch (err) {
-        throw new Error('Error parsing Telegram response: %s', resp[0].body);
-      }
-      if (data.ok) {
-        return data.result;
-      } else {
-        throw new Error(data.error_code+' '+data.description);
-      }
-    });
-};
 
 /**
  * Generates url with bot token and provided path/method you want to be got/executed by bot
@@ -310,6 +219,99 @@ TelegramBot.prototype._formatSendData = function (type, data) {
   }
   return [formData, fileId];
 };
+
+util.inherits(TelegramBot, EventEmitter);
+
+TelegramBot.prototype.initPolling = function() {
+  if (this._polling) {
+    this._polling.abort = true;
+    this._polling.lastRequest.cancel('Polling restart');
+  }
+  this._polling = new TelegramBotPolling(this.token, this.options.polling, this.processUpdate);
+};
+
+TelegramBot.prototype._processUpdate = function (update) {
+  debug('Process Update %j', update);
+  var message = update.message;
+  var inline_query = update.inline_query;
+  var chosen_inline_result = update.chosen_inline_result;
+
+  if (message) {
+    debug('Process Update message %j', message);
+    this.emit('message', message);
+    var processMessageType = function (messageType) {
+      if (message[messageType]) {
+        debug('Emtting %s: %j', messageType, message);
+        this.emit(messageType, message);
+      }
+    };
+    this.messageTypes.forEach(processMessageType.bind(this));
+    if (message.text) {
+      debug('Text message');
+      this.textRegexpCallbacks.forEach(function (reg) {
+        debug('Matching %s whith', message.text, reg.regexp);
+        var result = reg.regexp.exec(message.text);
+        if (result) {
+          debug('Matches', reg.regexp);
+          reg.callback(message, result);
+        }
+      });
+    }
+    if (message.reply_to_message) {
+      // Only callbacks waiting for this message
+      this.onReplyToMessages.forEach(function (reply) {
+        // Message from the same chat
+        if (reply.chatId === message.chat.id) {
+          // Responding to that message
+          if (reply.messageId === message.reply_to_message.message_id) {
+            // Resolve the promise
+            reply.callback(message);
+          }
+        }
+      });
+    }
+  } else if (inline_query) {
+    debug('Process Update inline_query %j', inline_query);
+    this.emit('inline_query', inline_query);
+  } else if (chosen_inline_result) {
+    debug('Process Update chosen_inline_result %j', chosen_inline_result);
+    this.emit('chosen_inline_result', chosen_inline_result);
+  }
+};
+
+TelegramBot.prototype._request = function (path, options) {
+  if (!this.token) {
+    throw new Error('Telegram Bot Token not provided!');
+  }
+  options = options || {};
+  if (options.form) {
+    var replyMarkup = options.form.reply_markup;
+    if (replyMarkup && typeof replyMarkup !== 'string') {
+      // reply_markup must be passed as JSON stringified to Telegram
+      options.form.reply_markup = JSON.stringify(replyMarkup);
+    }
+  }
+  options.url = this._buildURL(path);
+  debug('HTTP request: %j', options);
+  return requestPromise(options)
+      .then(function (resp) {
+        if (resp[0].statusCode !== 200) {
+          throw new Error(resp[0].statusCode+' '+resp[0].body);
+        }
+        var data;
+        try {
+          data = JSON.parse(resp[0].body);
+        } catch (err) {
+          throw new Error('Error parsing Telegram response: %s', resp[0].body);
+        }
+        if (data.ok) {
+          return data.result;
+        } else {
+          throw new Error(data.error_code+' '+data.description);
+        }
+      });
+};
+
 
 /**
  * Send photo
