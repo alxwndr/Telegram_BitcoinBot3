@@ -37,6 +37,37 @@ MongoClient.connect(url, function (err, db) {
     });
 });
 
+
+sendMessage: function (chatId, text, replyMarkup) {
+    let request;
+
+    replyMarkup = replyMarkup || JSON.stringify({
+            keyboard: [['💵']],
+            resize_keyboard: true
+        });
+
+    options.path = path + querystring.stringify({
+            chat_id: chatId,
+            text: text,
+            reply_markup: replyMarkup,
+            parse_mode: 'Markdown'
+        });
+
+    request = https.request (options, function (res) {
+        res.on('data', function (resData) {
+            console.log('Got answer at: ' + new Date() + '\n', JSON.parse(resData.toString()));
+        });
+    });
+
+    request.on('error', function (e) {
+        console.log('Problem with request at: ' + new Date() + '\n', e.message);
+    });
+
+    request.end();
+},
+
+
+
 updateUser: function (chatId, db, options) {
     let that = this;
 
