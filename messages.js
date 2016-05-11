@@ -16,3 +16,10 @@ else {
 }
 // bot.setWebHook('https://api.telegram.org/bot' + bot.token);
 console.log('bot server started...');
+
+bot.onText(/^\/say_hello (.+)$/, function (msg, match) {
+    var name = match[1];
+    bot.sendMessage(msg.chat.id, 'Hello ' + name + '!').then(function () {
+        // reply sent!
+    });
+});
