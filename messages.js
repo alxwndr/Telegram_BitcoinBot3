@@ -23,3 +23,14 @@ bot.onText(/^\/say_hello (.+)$/, function (msg, match) {
         // reply sent!
     });
 });
+bot.onText(/^\/sum((\s+\d+)+)$/, function (msg, match) {
+    var result = 0;
+    match[1].trim().split(/\s+/).forEach(function (i) {
+        result += (+i || 0);
+    })
+    bot.sendMessage(msg.chat.id, result).then(function () {
+        // reply sent!
+    });
+});
+
+module.exports = bot;
