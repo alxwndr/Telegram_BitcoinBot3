@@ -34,3 +34,6 @@ bot.onText(/^\/sum((\s+\d+)+)$/, function (msg, match) {
 });
 
 module.exports = bot;
+
+
+
