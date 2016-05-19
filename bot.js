@@ -171,31 +171,7 @@ module.exports = function(bot){
 
 
 
-        } else if (messageText === '/settings') {
-            this.handleSettings(chatId, db, data);
-        } else if (messageText === '/stop') {
-            this.updateUser(chatId, db, {sendChanges: false});
-            this.sendMessage(chatId, 'В');
-        } else if (messageText === '/get' || messageText === '💵') {
-            this.sendRate(chatId, db);
-        } else {
-            db.collection('users').findOne({id: chatId}, function (err, user) {
-                if (err) { throw err; }
 
-                if (messageText === '') {
-                    that.updateUser(chatId, db, {sendChanges: false});
-                    that.handleSettings(chatId, db);
-                } else if (messageText == '') {
-                    that.updateUser(chatId, db, {sendChanges: true});
-                    that.handleSettings(chatId, db);
-                } else if (messageText === а') {
-                let text = '';
-
-                that.updateUser(chatId, db, {lastMessage: messageText});
-                that.sendMessage(chatId, text, JSON.stringify({
-                    keyboard: [['']],
-                    resize_keyboard: true
-                }));
 
 
 
