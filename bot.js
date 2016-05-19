@@ -142,32 +142,6 @@ module.exports = function(bot){
 
 
 
-        function generateHelpString()
-        {
-            var botAnswer = '';
-            for (var i = 0; i < catchPhrases.helpCommand.length; ++i) {
-                botAnswer += catchPhrases.helpCommand[i] + '\n';
-            }
-
-            if (getAdminRights()) {
-                for (var j = 0; j < catchPhrases.helpCommandAdmin.length; ++j) {
-                    botAnswer += catchPhrases.helpCommandAdmin[j] + '\n';
-                }
-            }
-
-            // Delete last line break
-            botAnswer.trim();
-
-            return botAnswer;
-
-            function trimEachString(aString)
-            {
-                return aString.split('\n').map(function(aLine)
-                {
-                    aLine = aLine.trim();
-                    return aLine;
-                }).join('\n');
-            }
 
 
 
